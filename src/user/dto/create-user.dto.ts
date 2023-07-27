@@ -3,5 +3,6 @@ export class CreateUserDto {
   public email: string;
   public age: number;
   public status: boolean;
+  public gender: string;
   private password: string;
 }
