@@ -1,24 +1,25 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-
-const environment = 'development';
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
+import { configModule } from './configure.root';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
     UserModule,
-    ConfigModule.forRoot({
-      envFilePath: `.env.${environment}`,
-      isGlobal: true,
-    }),
+    configModule,
     MongooseModule.forRoot(
       'mongodb+srv://Ivanka:7is7UItnJWINrvWH@cluster0.kjp3yfy.mongodb.net/mydb-nest?retryWrites=true&w=majority',
     ),
+    AuthModule,
+    TokenModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService],
 })
 export class AppModule {}
