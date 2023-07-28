@@ -1,32 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { nanoid } from 'nanoid';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
+import * as _ from 'lodash';
 
 import { CreateUserDto } from './dto/create-user.dto';
+import { IUser } from './interfaces/user.interface';
 
 @Injectable()
 export class UserService {
-  private users = [];
+  constructor(@InjectModel('User') private readonly userModel: Model<IUser>) {}
 
-  getAll() {
-    return this.users;
+  async getAll(): Promise<IUser[]> {
+    return await this.userModel.find();
   }
 
-  getUserById(id: string) {
-    return this.users.find((user) => user.id == id);
+  async getUserById(id: string): Promise<IUser> {
+    return await this.userModel.findById(id).exec();
   }
 
-  createUser(user: CreateUserDto) {
-    this.users.push({
-      ...user,
-      id: nanoid(),
-    });
-    return user;
+  async createUser(user: CreateUserDto): Promise<IUser> {
+    const hash = await bcrypt.hash(user.password, 10);
+
+    const createdUser = new this.userModel(
+      _.assignIn(user, { password: hash }),
+    );
+
+    return await createdUser.save();
   }
 
   //   updateUser(data: UpdateUserDto) {}
-  deleteUser(id: string) {
-    const deletedUser = this.users.find((user) => user.id === id);
-    this.users = this.users.filter((user) => user.id !== id);
-    return deletedUser;
+  async deleteUser(id: string): Promise<IUser> {
+    return await this.userModel.findByIdAndRemove(id).exec();
   }
 }
