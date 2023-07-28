@@ -5,7 +5,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
-const environment = process.env.NODE_ENV || 'development';
+const environment = 'development';
 
 @Module({
   imports: [
@@ -14,13 +14,9 @@ const environment = process.env.NODE_ENV || 'development';
       envFilePath: `.env.${environment}`,
       isGlobal: true,
     }),
-    MongooseModule.forRootAsync({
-      useFactory: () => ({
-        uri: process.env.DATABASE_URL,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }),
-    }),
+    MongooseModule.forRoot(
+      'mongodb+srv://Ivanka:7is7UItnJWINrvWH@cluster0.kjp3yfy.mongodb.net/mydb-nest?retryWrites=true&w=majority',
+    ),
   ],
   controllers: [AppController],
   providers: [AppService],
