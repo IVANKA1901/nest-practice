@@ -4,5 +4,5 @@ export class CreateUserDto {
   public age: number;
   public status: boolean;
   public gender: string;
-  private password: string;
+  readonly password: string;
 }
