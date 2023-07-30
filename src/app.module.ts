@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { JwtService } from '@nestjs/jwt';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -7,6 +8,8 @@ import { UserModule } from './user/user.module';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { configModule } from './configure.root';
+import { TokenService } from './token/token.service';
+import { UserService } from './user/user.service';
 import { TokenModule } from './token/token.module';
 
 @Module({
@@ -20,6 +23,6 @@ import { TokenModule } from './token/token.module';
     TokenModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService, AuthService, JwtService, TokenService, UserService],
 })
 export class AppModule {}
