@@ -7,5 +7,5 @@ export class CreateUserTokenDto {
   @IsString()
   uId: mongoose.Types.ObjectId;
   @IsString()
-  expireAt: string;
+  expiresAt: string;
 }
