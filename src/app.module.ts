@@ -11,6 +11,7 @@ import { configModule } from './configure.root';
 import { TokenService } from './token/token.service';
 import { UserService } from './user/user.service';
 import { TokenModule } from './token/token.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TokenModule } from './token/token.module';
     ),
     AuthModule,
     TokenModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService, JwtService, TokenService, UserService],
