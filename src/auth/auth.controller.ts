@@ -17,7 +17,7 @@ import { ConfirmAccountDto } from './dto/confirm-account.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/signUp')
+  @Post('/signup')
   async signup(@Body(ValidationPipe) user: CreateUserDto): Promise<boolean> {
     return this.authService.signUp(user);
   }
