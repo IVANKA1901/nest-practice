@@ -48,7 +48,7 @@ export class UserService {
     return await this.userModel.findOne({ email }).exec();
   }
 
-  async update(_id: string, payload: Partial<IUser>) {
-    return await this.userModel.updateOne({ _id }, payload);
+  async update(id: string, payload: Partial<IUser>) {
+    return await this.userModel.updateOne({ _id: id }, payload);
   }
 }
