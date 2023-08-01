@@ -19,7 +19,7 @@ export class CreateUserDto {
   @ApiProperty()
   @IsEmail()
   @IsNotEmpty()
-  readonly status: string;
+  status: string;
 
   @ApiProperty()
   @IsEmail()
