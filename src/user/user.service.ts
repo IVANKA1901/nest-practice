@@ -9,6 +9,8 @@ import { IUser } from './interfaces/user.interface';
 
 @Injectable()
 export class UserService {
+  private readonly saltRounds = 10;
+
   constructor(@InjectModel('User') private readonly userModel: Model<IUser>) {}
 
   async getAll(): Promise<IUser[]> {
@@ -19,8 +21,13 @@ export class UserService {
     return await this.userModel.findById(id).exec();
   }
 
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(this.saltRounds);
+    return await bcrypt.hash(password, salt);
+  }
+
   async createUser(user: CreateUserDto): Promise<IUser> {
-    const hash = await bcrypt.hash(user.password, 10);
+    const hash = await this.hashPassword(user.password);
 
     const createdUser = new this.userModel(
       _.assignIn(user, { password: hash }),
@@ -29,8 +36,19 @@ export class UserService {
     return await createdUser.save();
   }
 
-  //   updateUser(data: UpdateUserDto) {}
   async deleteUser(id: string): Promise<IUser> {
     return await this.userModel.findByIdAndRemove(id).exec();
+  }
+
+  async find(id: string): Promise<IUser> {
+    return await this.userModel.findById(id).exec();
+  }
+
+  async findByEmail(email: string): Promise<IUser> {
+    return await this.userModel.findOne({ email }).exec();
+  }
+
+  async update(_id: string, payload: Partial<IUser>) {
+    return await this.userModel.updateOne({ _id }, payload);
   }
 }
