@@ -13,13 +13,14 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { ConfirmAccountDto } from './dto/confirm-account.dto';
 import { SignInDto } from './dto/signin.dto';
 import { IReadableUser } from 'src/user/interfaces/readable-user.interface';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/signup')
+  @Post('/signUp')
   async signUp(
     @Body(new ValidationPipe()) user: CreateUserDto,
   ): Promise<boolean> {
@@ -34,10 +35,17 @@ export class AuthController {
     return true;
   }
 
-  @Post('/signin')
+  @Post('/signIn')
   async signIn(
     @Body(new ValidationPipe()) signInDto: SignInDto,
   ): Promise<IReadableUser> {
     return await this.authService.signIn(signInDto);
+  }
+
+  @Post('/forgotPassword')
+  async forgotPassword(
+    @Body(new ValidationPipe()) forgotPasswordDto: ForgotPasswordDto,
+  ): Promise<void> {
+    return await this.forgotPassword(forgotPasswordDto);
   }
 }
